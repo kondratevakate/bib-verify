@@ -1,0 +1,53 @@
+% Entries exhibiting common LLM-generated BibTeX patterns.
+% Every entry should be flagged by --offline heuristics.
+
+% Pattern 1: placeholder arXiv ID
+@article{ghost_synthba,
+  title   = {{SynthBA}: A robust brain age estimator leveraging synthetic data},
+  author  = {Smith, Alice and others},
+  journal = {arXiv preprint arXiv:2210.xxxxx},
+  year    = {2022}
+}
+
+% Pattern 2: @inproceedings with a journal as booktitle
+@inproceedings{peng_typeconfusion,
+  title     = {Accurate brain age prediction with lightweight deep neural networks},
+  author    = {Peng, Han and Gong, Weikang and Beckmann, Christian F. and Vedaldi, Andrea and Smith, Stephen M.},
+  booktitle = {Medical Image Analysis},
+  volume    = {68},
+  pages     = {101871},
+  year      = {2021}
+}
+
+% Pattern 3: "and others" after one named author
+@article{lonely_author,
+  title   = {Generic important paper about neural networks},
+  author  = {Jones, B. and others},
+  journal = {Nature},
+  year    = {2024}
+}
+
+% Pattern 4: post-2015 article missing both DOI and eprint
+@article{no_identifier_2023,
+  title   = {Important recent work on diffusion models},
+  author  = {Doe, John and Roe, Jane and Park, Sam},
+  journal = {NeurIPS},
+  year    = {2023}
+}
+
+% Pattern 5: note="preprint" without identifier
+@article{vague_preprint,
+  title   = {Some forthcoming brain MRI work},
+  author  = {Kim, Y. and Lee, R. and Patel, A.},
+  journal = {The Lancet Digital Health},
+  year    = {2025},
+  note    = {preprint / in press}
+}
+
+% Pattern 6: question-mark placeholder
+@article{placeholder_qmark,
+  title   = {???},
+  author  = {Anonymous},
+  journal = {TBD},
+  year    = {2024}
+}

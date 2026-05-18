@@ -1,0 +1,36 @@
+% Entries that pass offline heuristics but are wrong against the
+% authoritative source. Requires --network to catch.
+%
+% These DOIs are REAL (they resolve), but the cited title/author
+% list disagrees with what Crossref returns -- this is the
+% Substituted (S) failure mode.
+
+% Real DOI, real paper, but invented co-authors.
+% The real SIMON paper has these authors:
+%   Duchesne, Dieumegarde, Chouinard, Farokhian, Badhwar, Bellec,
+%   Tetreault, Descoteaux, Bore, Houde, Beaulieu, Potvin.
+% The author list below is a plausible-sounding hallucination.
+@article{simon_fake_authors,
+  title   = {Structural and functional multi-platform {MRI} series of a
+             single human volunteer over more than fifteen years},
+  author  = {Duchesne, Simon and Chouinard, Isabelle and Potvin, Olivier and
+             Fonov, Vladimir S. and Khademi, April and Bartha, Robert and
+             Bellec, Pierre and Collins, D. Louis and Descoteaux, Maxime and
+             Black, Sandra E.},
+  journal = {Scientific Data},
+  volume  = {6},
+  number  = {1},
+  pages   = {245},
+  year    = {2019},
+  doi     = {10.1038/s41597-019-0262-8}
+}
+
+% Real DOI but resolves to a completely different paper.
+% This DOI points to "PyVista: 3D plotting...", not to a SynthBA paper.
+@article{wrong_doi_synthba,
+  title   = {{SynthBA}: A robust brain age estimator},
+  author  = {Lemaitre, Paul},
+  journal = {NeuroImage},
+  year    = {2022},
+  doi     = {10.21105/joss.01450}
+}

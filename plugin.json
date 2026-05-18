@@ -1,0 +1,41 @@
+{
+  "name": "bib-verify",
+  "version": "0.1.0",
+  "description": "Verify BibTeX citations against academic databases (Crossref, arXiv, OpenAlex, PubMed). Catches hallucinated references, AI-generated patterns, and entry-type confusion before they reach a reviewer.",
+  "author": {
+    "name": "Ekaterina Kondrateva",
+    "email": "kondratevakate@gmail.com",
+    "url": "https://github.com/kondratevakate"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/kondratevakate/bib-verify",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kondratevakate/bib-verify"
+  },
+  "keywords": [
+    "bibtex",
+    "citations",
+    "academic",
+    "latex",
+    "hallucination",
+    "crossref",
+    "arxiv",
+    "openalex",
+    "pubmed",
+    "reference-verification"
+  ],
+  "skills": [
+    "skills/bib-verify"
+  ],
+  "commands": [
+    "commands/verify-bib.md"
+  ],
+  "hooks": [
+    "hooks/post-edit-bib.json"
+  ],
+  "engines": {
+    "python": ">=3.8",
+    "claude-code": ">=1.0.0"
+  }
+}

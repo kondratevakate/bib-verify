@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/skills/bib-verify/scripts/verify_bib.py\" \"${CLAUDE_FILE_PATHS}\" --offline --strict",
+            "filters": {
+              "file_paths": ["*.bib", "**/*.bib"]
+            },
+            "description": "Run offline citation heuristics after editing any .bib file; blocks on placeholder patterns, type-confusion, and lazy author lists.",
+            "blocking": false
+          }
+        ]
+      }
+    ]
+  }
+}

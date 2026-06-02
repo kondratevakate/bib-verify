@@ -7,30 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- `CITATION.cff` so GitHub renders the "Cite this repository" button
-  and provides BibTeX / APA / Zotero handoffs.
-- `.zenodo.json` to prepopulate Zenodo DOI metadata on next release.
-- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` for the
-  GitHub Community Standards baseline.
-- `paper/paper.md` and `paper/paper.bib` draft for JOSS submission.
-- `examples/case-studies/dataset-review.md` with real-world audit
-  results (6 hallucinations caught out of 32 entries).
-- `.github/workflows/release.yml` for automatic GitHub Release on
-  every `v*` tag, with notes extracted from `CHANGELOG.md`.
-- Enriched skill description in `SKILL.md` for broader Claude Code
-  auto-triggering on user phrasings.
-- `docs/LIMITATIONS.md`: honest accounting of database coverage gaps,
-  heuristic-threshold caveats, single-source-of-truth fragility, and
-  the "not_found is not fabricated" principle; plus the roadmap.
-- `docs/AI_USAGE.md`: AI-provenance statement disclosing that the tool
-  was built with Claude Opus 4.8 under human direction, and how every
-  empirical claim was validated against ground truth.
-- `paper/paper.md`: added "Limitations and future work" and "AI usage
-  statement" sections for JOSS.
-- README: added Limitations and "How this was built" sections.
-
 ### Planned
 
 - Zotero Translation Server backend adapter for one-shot canonical
@@ -40,9 +16,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bibliographies.
 - Output formats: `json`, `jsonl`, `csv`.
 - Upstream PRs to RefChecker with AI-pattern heuristics.
-- Identifier-hijacking detection via secondary title-search when
-  status is `substituted` (catches the Barch HCP-task case in the
-  dataset-review case study).
+- Persistent local cache (SQLite) to avoid re-querying between runs.
+
+## [0.2.0] - 2026-06-02
+
+### Added
+
+- **Identifier-hijacking detection.** When a cited DOI resolves but to
+  a different paper (`substituted`), the tool now runs a secondary
+  title search: if the cited title + authors match a *different* real
+  DOI (title similarity >= 0.85 AND author overlap >= 0.6), it reports
+  "you likely meant DOI X, not DOI Y" and suggests the corrected
+  entry. Catches the most dangerous archetype -- a working link to the
+  wrong paper -- e.g. the real Barch HCP-task case where DOI `...05.041`
+  resolves to the WU-Minn overview but the entry names the task-fMRI
+  paper at `...05.033`. New `hijack` field on each verdict and a
+  dedicated report block.
+- `CITATION.cff` so GitHub renders the "Cite this repository" button
+  and provides BibTeX / APA / Zotero handoffs.
+- `.zenodo.json` to prepopulate Zenodo DOI metadata on release.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` for the
+  GitHub Community Standards baseline.
+- `paper/paper.md` and `paper/paper.bib` draft for JOSS submission,
+  with "Limitations and future work" and "AI usage statement" sections.
+- `examples/case-studies/dataset-review.md` with real-world audit
+  results (6 hallucinations caught out of 32 entries).
+- `.github/workflows/test.yml` (CI matrix) and `release.yml`
+  (auto-release on `v*` tags with notes from this changelog).
+- `.github/ISSUE_TEMPLATE/` structured bug-report and feature-request
+  forms.
+- `docs/LIMITATIONS.md`: honest accounting of database coverage gaps,
+  heuristic-threshold caveats, single-source-of-truth fragility, and
+  the "not_found is not fabricated" principle; plus the roadmap.
+- `docs/AI_USAGE.md`: AI-provenance statement disclosing that the tool
+  was built with Claude Opus 4.8 under human direction, and how every
+  empirical claim was validated against ground truth.
+- Enriched skill description in `SKILL.md` for broader Claude Code
+  auto-triggering on user phrasings.
+- README: "Real-world results", "Limitations", and "How this was
+  built (AI usage)" sections; dynamic CI and release badges.
+
+### Tests
+
+- 5 new tests for identifier-hijacking detection (monkeypatched,
+  offline-deterministic). 33 offline tests passing.
 
 ## [0.1.0] - 2026-05-18
 

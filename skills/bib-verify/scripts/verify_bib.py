@@ -379,6 +379,10 @@ class Verdict:
     field_classification: dict = field(default_factory=dict)
     # Risk score 0-100: weighted combination of issues + cutoff + co-occurrence
     risk_score: int = 0
+    # Identifier-hijacking evidence: when the cited DOI resolves to one
+    # paper but the cited title+authors match a *different* real paper,
+    # this holds {cited_doi, correct_doi, correct_title}.
+    hijack: dict | None = None
 
 
 def offline_checks(entry: BibEntry) -> list:
@@ -703,6 +707,80 @@ def _finalize(v: Verdict, entry: BibEntry) -> Verdict:
     return v
 
 
+def _detect_identifier_hijacking(v: Verdict, entry: BibEntry, sleep: float = 0.0) -> None:
+    """Detect "identifier hijacking": the cited DOI resolves, but to a
+    different paper than the one named in the entry's title/authors.
+
+    Mechanism (the inverse of normal DOI verification):
+      1. We already know status == "substituted" -- the cited DOI points
+         to a record whose title/authors disagree with this entry.
+      2. Search Crossref by the *claimed* title (+ first author).
+      3. If a candidate matches the claimed title (sim >= 0.85) AND the
+         claimed authors (overlap >= 0.6) AND has a DOI different from the
+         cited one, then the entry names a real paper but carries the
+         wrong DOI -- the dangerous "working link to the wrong paper".
+
+    Requiring BOTH high title similarity and high author overlap keeps the
+    false-positive rate low: a coincidental title match with disjoint
+    authors is a different paper, not a hijack, and does not trigger.
+
+    Mutates `v` in place: sets `v.hijack`, appends an issue, and (if no
+    suggestion exists yet) sets `v.suggested` to the corrected entry.
+    """
+    cited_doi = (entry.get("doi") or "").strip().lower().lstrip("doi:").strip()
+    claimed_title = re.sub(r"[{}]", "", entry.get("title", "")).strip()
+    claimed_authors = entry.get("author", "")
+    if not cited_doi or not claimed_title:
+        return
+
+    first_author = claimed_authors.split(" and ")[0].split(",")[0].strip()
+    candidates = crossref_search(claimed_title, author=first_author or None, rows=5)
+    if sleep:
+        time.sleep(sleep)
+    if not candidates:
+        return
+
+    for cand in candidates:
+        cand_title = _crossref_title(cand)
+        cand_doi = (cand.get("DOI") or "").strip().lower()
+        if not cand_title or not cand_doi:
+            continue
+        # Must be a *different* identifier than the one cited
+        if cand_doi == cited_doi:
+            continue
+        title_sim = _title_similarity(claimed_title, cand_title)
+        if title_sim < 0.85:
+            continue
+        cand_authors = []
+        for a in cand.get("author", []) or []:
+            family = a.get("family", "")
+            given = a.get("given", "")
+            if family:
+                cand_authors.append(f"{family}, {given}" if given else family)
+        # Author overlap with the CLAIMED authors (only judge when we have both)
+        overlap = _author_overlap(claimed_authors, cand_authors) if (claimed_authors and cand_authors) else 1.0
+        if overlap < 0.6:
+            continue
+        # Found it: the claimed title+authors point to a different real DOI.
+        v.hijack = {
+            "cited_doi": cited_doi,
+            "correct_doi": cand.get("DOI"),
+            "correct_title": cand_title,
+            "title_sim": round(title_sim, 3),
+            "author_overlap": round(overlap, 3),
+        }
+        v.issues.append(
+            f"identifier hijacking: cited DOI '{cited_doi}' points to a different paper, "
+            f"but the cited title+authors match '{cand_title[:60]}' "
+            f"(DOI {cand.get('DOI')}, title sim {title_sim:.2f}, author overlap {overlap:.0%}). "
+            f"You likely meant DOI {cand.get('DOI')}."
+        )
+        if not v.suggested:
+            v.suggested = _crossref_to_bibtex(cand, entry.key)
+        v.risk_score = _compute_risk_score(v)
+        return
+
+
 def verify_entry(entry: BibEntry, offline: bool = False, sleep: float = 0.0) -> Verdict:
     v = Verdict(key=entry.key, type=entry.type, issues=offline_checks(entry))
 
@@ -754,7 +832,13 @@ def verify_entry(entry: BibEntry, offline: bool = False, sleep: float = 0.0) -> 
                 "type": item.get("type"),
                 "authors": cr_authors,
             }
-            return _finalize(v, entry)
+            v = _finalize(v, entry)
+            # If the DOI resolved to a different paper (substituted), check
+            # whether the cited title+authors point to a *different* DOI --
+            # i.e. identifier hijacking (a working link to the wrong paper).
+            if v.status == "substituted":
+                _detect_identifier_hijacking(v, entry, sleep=sleep)
+            return v
         else:
             v.issues.append(f"DOI '{doi}' not found in Crossref")
 
@@ -903,6 +987,13 @@ def render_markdown(verdicts: list, bib_path: str, include_fix: bool = False) ->
         if v.field_classification:
             labels = ", ".join(f"{k}={cls}" for k, cls in sorted(v.field_classification.items()))
             lines.append(f"**Field classification** (C=Correct, P=Partial, S=Substituted, F=Fabricated, M=Missing, X=N/A): {labels}")
+            lines.append("")
+        if v.hijack:
+            lines.append("**IDENTIFIER HIJACKING DETECTED** -- a working link to the wrong paper:")
+            lines.append(f"- cited DOI: `{v.hijack['cited_doi']}` (resolves to a different paper)")
+            lines.append(f"- correct DOI: `{v.hijack['correct_doi']}`")
+            lines.append(f"- correct title: {v.hijack['correct_title']}")
+            lines.append(f"- match confidence: title {v.hijack['title_sim']:.0%}, author overlap {v.hijack['author_overlap']:.0%}")
             lines.append("")
         if v.issues:
             for iss in v.issues:

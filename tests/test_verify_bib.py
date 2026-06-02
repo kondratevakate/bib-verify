@@ -205,6 +205,112 @@ class TestEntryStatusRollup:
         assert vb._entry_status_from_fields(cls, "verified_by_title") == "needs_review"
 
 
+class TestIdentifierHijacking:
+    """The cited DOI resolves but to a different paper; the claimed
+    title+authors point to a *different* real DOI. Uses monkeypatched
+    crossref_search so the test is deterministic and offline."""
+
+    def _entry(self):
+        # Mimics the Barch HCP-task case: a real paper cited with a DOI
+        # that actually belongs to a sibling paper of the same project.
+        return vb.BibEntry(
+            key="barch2013hcptask",
+            type="article",
+            fields={
+                "title": "Function in the human connectome: task-fMRI and individual differences",
+                "author": "Barch, Deanna M. and Burgess, Gregory C. and Harms, Michael P.",
+                "doi": "10.1016/j.neuroimage.2013.05.033",  # cited (wrong) DOI
+                "year": "2013",
+            },
+        )
+
+    def test_detects_hijack_when_title_and_authors_point_elsewhere(self, monkeypatch):
+        # The claimed title+authors match a DIFFERENT DOI in the search results.
+        fake_candidates = [
+            {
+                "title": ["Function in the human connectome: task-fMRI and individual differences in behavior"],
+                "DOI": "10.1016/j.neuroimage.2013.05.033.CORRECT",
+                "author": [
+                    {"family": "Barch", "given": "Deanna M."},
+                    {"family": "Burgess", "given": "Gregory C."},
+                    {"family": "Harms", "given": "Michael P."},
+                ],
+            }
+        ]
+        monkeypatch.setattr(vb, "crossref_search", lambda *a, **k: fake_candidates)
+        v = vb.Verdict(key="barch2013hcptask", type="article", status="substituted")
+        vb._detect_identifier_hijacking(v, self._entry(), sleep=0)
+        assert v.hijack is not None
+        assert v.hijack["correct_doi"] == "10.1016/j.neuroimage.2013.05.033.CORRECT"
+        assert any("identifier hijacking" in i.lower() for i in v.issues)
+
+    def test_no_hijack_when_authors_disagree(self, monkeypatch):
+        # Same title, but totally different authors -> a different paper,
+        # NOT a hijack. Must not fire (keeps false positives down).
+        fake_candidates = [
+            {
+                "title": ["Function in the human connectome: task-fMRI and individual differences"],
+                "DOI": "10.9999/unrelated",
+                "author": [
+                    {"family": "Nguyen", "given": "T."},
+                    {"family": "Okonkwo", "given": "B."},
+                    {"family": "Silva", "given": "R."},
+                ],
+            }
+        ]
+        monkeypatch.setattr(vb, "crossref_search", lambda *a, **k: fake_candidates)
+        v = vb.Verdict(key="barch2013hcptask", type="article", status="substituted")
+        vb._detect_identifier_hijacking(v, self._entry(), sleep=0)
+        assert v.hijack is None
+
+    def test_no_hijack_when_candidate_doi_equals_cited(self, monkeypatch):
+        # Candidate found, but its DOI is the same as the cited one -> not
+        # a hijack (just the normal substituted case).
+        entry = self._entry()
+        fake_candidates = [
+            {
+                "title": ["Function in the human connectome: task-fMRI and individual differences"],
+                "DOI": entry.get("doi"),  # same as cited
+                "author": [
+                    {"family": "Barch", "given": "Deanna M."},
+                    {"family": "Burgess", "given": "Gregory C."},
+                    {"family": "Harms", "given": "Michael P."},
+                ],
+            }
+        ]
+        monkeypatch.setattr(vb, "crossref_search", lambda *a, **k: fake_candidates)
+        v = vb.Verdict(key="barch2013hcptask", type="article", status="substituted")
+        vb._detect_identifier_hijacking(v, entry, sleep=0)
+        assert v.hijack is None
+
+    def test_no_hijack_when_no_candidates(self, monkeypatch):
+        monkeypatch.setattr(vb, "crossref_search", lambda *a, **k: [])
+        v = vb.Verdict(key="barch2013hcptask", type="article", status="substituted")
+        vb._detect_identifier_hijacking(v, self._entry(), sleep=0)
+        assert v.hijack is None
+
+    def test_hijack_sets_suggested_when_empty(self, monkeypatch):
+        fake_candidates = [
+            {
+                "title": ["Function in the human connectome: task-fMRI and individual differences"],
+                "DOI": "10.1016/j.neuroimage.2013.05.033.CORRECT",
+                "author": [
+                    {"family": "Barch", "given": "Deanna M."},
+                    {"family": "Burgess", "given": "Gregory C."},
+                    {"family": "Harms", "given": "Michael P."},
+                ],
+                "container-title": ["NeuroImage"],
+                "type": "journal-article",
+                "issued": {"date-parts": [[2013]]},
+            }
+        ]
+        monkeypatch.setattr(vb, "crossref_search", lambda *a, **k: fake_candidates)
+        v = vb.Verdict(key="barch2013hcptask", type="article", status="substituted")
+        vb._detect_identifier_hijacking(v, self._entry(), sleep=0)
+        assert v.suggested is not None
+        assert "CORRECT" in v.suggested
+
+
 # ----------------------------------------------------------------------
 # End-to-end on fixtures
 # ----------------------------------------------------------------------

@@ -84,13 +84,25 @@ Each entry gets a verdict:
 
 | Verdict | Meaning | Action |
 |---|---|---|
-| `verified_by_doi` | DOI resolved in Crossref, metadata consistent | none |
+| `verified` / `verified_by_doi` | DOI resolved, metadata consistent | none |
 | `verified_by_arxiv` | arXiv ID exists | check DOI/journal version exists |
 | `verified_by_title` | Title found with >0.85 similarity | review author/year fields |
+| `needs_review` | Resolved but a field is Partial without a strong anchor | inspect manually |
 | `mismatch` | Found a candidate but year/title/authors disagree | fix or replace |
+| `substituted` | DOI/arXiv resolves but to a *different* paper | fix identifier or replace |
+| `hallucination` | 3+ identity fields disagree, or fabricated field | almost certainly fake — replace |
 | `placeholder` | Contains `xxxxx`, `???`, `TBD`, etc. | must fix |
-| `not_found` | No record matched | likely hallucinated — verify manually |
+| `not_found` | No record matched | un-indexed OR hallucinated — verify manually, do NOT auto-delete |
 | `type_error` | `@inproceedings` for a journal venue or vice versa | change entry type |
+
+If a verdict carries a **hijack** block, the cited DOI resolves to one
+paper while the cited title+authors match a *different* real DOI. This
+is the "working link to the wrong paper" case. The report names the
+correct DOI; surface it prominently and offer the corrected entry.
+
+Note: `not_found` does **not** mean fabricated. Books, datasets, grey
+literature, fresh preprints, and non-English venues legitimately fail
+to resolve. Flag for manual review; never delete on this basis alone.
 
 ## Workflow when running the skill
 

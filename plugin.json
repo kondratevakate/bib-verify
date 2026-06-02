@@ -28,6 +28,9 @@
   "skills": [
     "skills/bib-verify"
   ],
+  "agents": [
+    "agents/citation-auditor.md"
+  ],
   "commands": [
     "commands/verify-bib.md"
   ],

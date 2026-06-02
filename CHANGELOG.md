@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `citation-auditor` agent: autonomously locates a `.bib`, runs the
+  verifier, ranks findings by risk, and returns a scannable report.
+  Verifies and reports only -- never rewrites the bibliography.
+
+### Changed
+
+- Humanized the README prose: removed AI-writing tells (inflated
+  significance phrasing, mechanical bold inline-headers, decorative
+  em-dashes) while keeping the technical reference intact.
+
 ### Planned
 
 - Zotero Translation Server backend adapter for one-shot canonical

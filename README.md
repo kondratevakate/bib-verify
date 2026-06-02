@@ -11,21 +11,21 @@
 > before a reviewer does.
 
 A Claude Code plugin that verifies every `.bib` entry against real
-academic databases (Crossref, arXiv, OpenAlex, PubMed) and flags
-LLM-style citation patterns — placeholder arXiv IDs, fake co-author
-lists, `@inproceedings` pointing at journals, and DOIs that resolve
-to entirely different papers.
+academic databases (Crossref, arXiv, OpenAlex, PubMed) and flags the
+citation patterns LLMs tend to produce: placeholder arXiv IDs, fake
+co-author lists, `@inproceedings` entries pointing at journals, and
+DOIs that resolve to a different paper than the one cited.
 
 ## Why now
 
-Citation errors have always existed: a 2024 scoping review across 105
-studies found a baseline reference-error rate of ~32.7%. Most of those
-were metadata errors — wrong page numbers, wrong volume, misspelled
-authors — pointing at real papers.
+Citation errors aren't new. A 2024 scoping review across 105 studies
+put the baseline reference-error rate around 32.7%. But most of those
+were metadata slips — a wrong page, a misspelled author — on papers
+that genuinely exist.
 
-**Generative AI changed the failure mode.** The new problem is not
-inaccurate references to real papers; it is *fabricated* references
-to papers that never existed.
+Generative AI changed what goes wrong. The new failure isn't a sloppy
+reference to a real paper; it's a clean-looking reference to a paper
+that was never written.
 
 In biomedical literature, the rate of papers with at least one fully
 fabricated reference rose roughly **12-fold in two years**:
@@ -41,10 +41,9 @@ The Lancet. A broader 2026 audit of 111M references across arXiv,
 bioRxiv, SSRN and PMC estimates ~147,000 hallucinated citations in 2025
 alone (Zhao et al.).*
 
-> The old citation problem was noisy metadata. The new citation problem
-> is **false epistemic scaffolding**: papers, authors, venues, and
-> identifiers that look real enough to pass review, but do not
-> correspond to an actual source.
+> The old problem was sloppy metadata pointing at real papers. The new
+> problem is references to papers that don't exist, dressed up well
+> enough to survive review.
 
 ## Three archetypes of hallucinated citations
 
@@ -65,40 +64,40 @@ Plausible authors, plausible title, real venue, invented entirely.
 }
 ```
 
-Sounds like a normal ML reference. Journal is real. Volume and pages
-look right. The paper does not exist. **`bib-verify` catches this via
-Crossref title search returning zero matches.**
+Sounds like a normal ML reference. The journal is real, the volume and
+pages look right, and the paper does not exist. A Crossref title search
+comes back empty, which is how `bib-verify` flags it.
 
-### 2. Partial attribute corruption — real authors, mutated metadata
+### 2. Partial attribute corruption: real authors, mutated metadata
 
-Real co-authors, but title / venue / year shuffled.
+Real co-authors, but the title, venue, or year has been shuffled.
 
-Real example from the NeurIPS audit: a citation to *MuSR* listed the
-paper as **EMNLP 2023** with one author added and two omitted. The
-real paper is **ICLR 2024** with the original author list.
+A real example from the NeurIPS audit: a citation to *MuSR* listed the
+paper as EMNLP 2023, with one author added and two dropped. The actual
+paper is ICLR 2024 with a different author list. `bib-verify` catches
+this through author overlap (below 60% on entries with three or more
+authors) and field-level classification that surfaces the wrong year
+or venue.
 
-**`bib-verify` catches this via the author-overlap heuristic (RefChecker
-rule: <60% overlap on 3+ author entries) and the C/M/F/P/S/X field
-classification surfacing year / venue mismatches.**
+### 3. Identifier hijacking: working DOI, wrong paper
 
-### 3. Identifier hijacking — working DOI, wrong paper
+This is the one that worries me most. The DOI resolves, the link opens,
+the page loads. But the paper at the other end is not the one being
+cited, so every surface check a reviewer might run still passes.
 
-The most dangerous archetype. The arXiv ID or DOI resolves, the link
-opens, the page renders — but the paper at the other end of the
-identifier is not the paper being cited.
+> The most dangerous hallucinated citation isn't the one with a broken
+> link. It's the one with a working link to the wrong paper.
 
-> *The most dangerous hallucinated citation is not the one with a
-> broken link. It is the one with a working link to the wrong paper.*
+As of v0.2.0, `bib-verify` doesn't just flag this case — it tells you
+which DOI you probably meant. When a DOI resolves but the title and
+authors don't match, the tool searches for the cited title; if that
+title belongs to a different real DOI, it names the correct one. The
+working link no longer counts as proof of validity.
 
-**`bib-verify` catches this via the "Substituted" (S) status: when a
-DOI resolves but the title/author overlap with the resolved record
-falls below threshold, the entry is escalated regardless of identifier
-validity.**
+### Two more patterns worth knowing
 
-### Bonus archetypes
-
-- **Placeholder hallucination** — `arXiv:2210.xxxxx`, `note = {URL to be updated}`. Caught offline in zero seconds.
-- **Inherited hallucination** — fake citation that propagated through training data from a withdrawn preprint. Caught when no canonical record exists in any indexed database.
+- **Placeholder hallucination** — `arXiv:2210.xxxxx` or `note = {URL to be updated}`. Caught offline, instantly.
+- **Inherited hallucination** — a fake citation that propagated through training data from a withdrawn preprint. Caught when no canonical record exists in any indexed database.
 
 ## What this catches
 
@@ -263,6 +262,10 @@ python ~/.claude/plugins/bib-verify/skills/bib-verify/scripts/verify_bib.py \
 
 - **Skill** (`skills/bib-verify/`) — triggered when you ask Claude
   to check citations in any phrasing.
+- **Agent** (`citation-auditor`) — runs a full bibliography audit on
+  its own and hands back a ranked findings report. Good for a
+  pre-submission sweep or when a reviewer says your references look
+  fake. It verifies and reports; it never rewrites your `.bib`.
 - **Slash command** (`/verify-bib`) — explicit invocation.
 - **PostToolUse hook** — runs offline heuristics automatically every
   time Claude edits a `.bib` file. Non-blocking by default.

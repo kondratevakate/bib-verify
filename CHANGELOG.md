@@ -7,18 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- `citation-auditor` agent: autonomously locates a `.bib`, runs the
-  verifier, ranks findings by risk, and returns a scannable report.
-  Verifies and reports only -- never rewrites the bibliography.
-
-### Changed
-
-- Humanized the README prose: removed AI-writing tells (inflated
-  significance phrasing, mechanical bold inline-headers, decorative
-  em-dashes) while keeping the technical reference intact.
-
 ### Planned
 
 - Zotero Translation Server backend adapter for one-shot canonical
@@ -29,6 +17,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output formats: `json`, `jsonl`, `csv`.
 - Upstream PRs to RefChecker with AI-pattern heuristics.
 - Persistent local cache (SQLite) to avoid re-querying between runs.
+
+## [0.2.1] - 2026-06-02
+
+### Added
+
+- `citation-auditor` agent: autonomously locates a `.bib`, runs the
+  verifier, ranks findings by risk, and returns a scannable report.
+  Verifies and reports only -- never rewrites the bibliography.
+- `docs/JOSS_CHECKLIST.md`: submission-readiness tracking, Zenodo
+  archival steps, and the co-author addition procedure.
+
+### Changed
+
+- Humanized the README prose: removed AI-writing tells (inflated
+  significance phrasing, mechanical bold inline-headers, decorative
+  em-dashes) while keeping the technical reference intact.
+
+### Notes
+
+- First release archived on Zenodo for a citable DOI.
 
 ## [0.2.0] - 2026-06-02
 

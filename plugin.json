@@ -1,6 +1,6 @@
 {
   "name": "bib-verify",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Verify BibTeX citations against academic databases (Crossref, arXiv, OpenAlex, PubMed). Catches hallucinated references, AI-generated patterns, and entry-type confusion before they reach a reviewer.",
   "author": {
     "name": "Ekaterina Kondrateva",

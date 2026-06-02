@@ -282,6 +282,30 @@ done
 Keep `--offline` in pre-commit to avoid network calls on every commit.
 Run the full network check manually before pushing.
 
+## Limitations
+
+This tool flags candidates for human review; it does not issue final
+verdicts autonomously. The most important caveat: **a `not_found`
+result is not proof of fabrication** — books, datasets, grey
+literature, very recent preprints, and under-indexed non-English
+venues legitimately fail to resolve. Never delete a reference solely
+because `bib-verify` could not find it. The tool also does not verify
+that a cited paper actually *supports* the claim it is attached to.
+
+See [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) for the full
+accounting (database coverage, threshold caveats, single-source-of-
+truth fragility) and the development roadmap.
+
+## How this was built (AI usage)
+
+`bib-verify` was built with AI assistance (Claude Opus 4.8, via Claude
+Code) under human direction — a deliberate irony, since the tool
+exists to catch AI-introduced citation errors. Every empirical claim
+here was validated against ground-truth bibliographies rather than
+asserted by the model. Full provenance, including which parts were
+human-decided versus AI-implemented and how claims were verified, is
+in [`docs/AI_USAGE.md`](docs/AI_USAGE.md).
+
 ## Dependencies
 
 Python 3.8+ standard library only. No `pip install` required.

@@ -21,6 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   every `v*` tag, with notes extracted from `CHANGELOG.md`.
 - Enriched skill description in `SKILL.md` for broader Claude Code
   auto-triggering on user phrasings.
+- `docs/LIMITATIONS.md`: honest accounting of database coverage gaps,
+  heuristic-threshold caveats, single-source-of-truth fragility, and
+  the "not_found is not fabricated" principle; plus the roadmap.
+- `docs/AI_USAGE.md`: AI-provenance statement disclosing that the tool
+  was built with Claude Opus 4.8 under human direction, and how every
+  empirical claim was validated against ground truth.
+- `paper/paper.md`: added "Limitations and future work" and "AI usage
+  statement" sections for JOSS.
+- README: added Limitations and "How this was built" sections.
 
 ### Planned
 

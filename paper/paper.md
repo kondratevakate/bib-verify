@@ -18,6 +18,8 @@ affiliations:
     index: 1
 date: 2 June 2026
 bibliography: paper.bib
+# This paper was written with AI assistance (Claude Opus 4.8); see the
+# "AI usage statement" section and AI_USAGE.md for full provenance.
 ---
 
 # Summary
@@ -133,6 +135,44 @@ audit confirmed both flagged references as hallucinated (a real
 arXiv-style placeholder identifier and a citation to a non-existent
 paper at the cited author) and produced replacement entries from
 Crossref with full author lists and verified DOIs.
+
+# Limitations and future work
+
+`bib-verify` is deterministic and queries a fixed set of databases
+(Crossref, arXiv, OpenAlex, PubMed). Consequently a `not_found`
+verdict indicates absence from those indices, not proof of
+fabrication: books, datasets, grey literature, very recent preprints,
+and under-indexed non-English venues may legitimately fail to
+resolve. The tool is therefore tuned to minimize false deletions of
+real references — it flags candidates for human review rather than
+asserting fabrication autonomously. Title-similarity and
+author-overlap thresholds are empirically tuned rather than
+calibrated against a labelled benchmark, and the offline heuristics
+encode anglophone publishing conventions. The tool verifies that a
+reference exists and that its metadata matches; it does not verify
+that the cited work supports the claim made in the citing sentence,
+which is a distinct and harder problem. Planned work includes an
+identifier-hijacking detector (secondary title search when a DOI
+resolves but author overlap is low), a persistent local cache, a
+Zotero Translation Server backend for canonical metadata, and an
+optional opt-in LLM web-search stage to distinguish un-indexed from
+truly fabricated references. A full accounting is maintained in the
+project's `LIMITATIONS.md`.
+
+# AI usage statement
+
+In keeping with the transparency this tool is designed to support,
+the authors disclose that `bib-verify` was implemented with the
+assistance of a large language model (Claude Opus 4.8, Anthropic)
+operated through Claude Code, under human direction. The human author
+defined the design, supplied the real-world failure cases, and made
+all consequential decisions; the model implemented code, tests, and
+documentation. Critically, every empirical claim in this work was
+validated against ground-truth bibliographies — a human reviewer's
+independent assessment of the MIDL bibliography, and manual
+dereferencing of each flagged DOI in the dataset-review case study —
+rather than asserted by the model. The project's `AI_USAGE.md`
+documents this provenance in full.
 
 # Acknowledgements
 

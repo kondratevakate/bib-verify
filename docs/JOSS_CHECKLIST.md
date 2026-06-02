@@ -19,7 +19,7 @@ the software itself.
 | Automated tests | done | 37 tests, CI on 3 OS x 3 Python |
 | Community guidelines (contribute / report / support) | done | CONTRIBUTING, CODE_OF_CONDUCT, SECURITY |
 | Author list with ORCIDs | partial | second author to be added on invitation |
-| Archived release with DOI | done | Zenodo: 10.5281/zenodo.20511185 (v0.2.1) |
+| Archived release with DOI | done | Zenodo concept DOI 10.5281/zenodo.20511184; v0.2.1 DOI ...185; also on Software Heritage |
 
 ## Known risks to flag honestly
 

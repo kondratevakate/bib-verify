@@ -5,7 +5,7 @@
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8A2BE2)](https://docs.anthropic.com/claude-code)
 [![Tests](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml/badge.svg)](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml)
 [![GitHub release](https://img.shields.io/github/v/release/kondratevakate/bib-verify?include_prereleases&label=release)](https://github.com/kondratevakate/bib-verify/releases)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20511185.svg)](https://doi.org/10.5281/zenodo.20511185)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20511184.svg)](https://doi.org/10.5281/zenodo.20511184)
 [![GitHub stars](https://img.shields.io/github/stars/kondratevakate/bib-verify?style=social)](https://github.com/kondratevakate/bib-verify)
 
 > Catch hallucinated and AI-generated citations in your BibTeX files
@@ -354,7 +354,12 @@ Zenodo record:
 
 > Kondrateva, E. (2026). *bib-verify: Catch hallucinated and
 > AI-generated citations in BibTeX files*. Zenodo.
-> https://doi.org/10.5281/zenodo.20511185
+> https://doi.org/10.5281/zenodo.20511184
+
+The DOI above is the concept DOI — it always resolves to the latest
+release. To cite a specific version for reproducibility, use that
+release's own DOI instead (for example, v0.2.1 is
+[10.5281/zenodo.20511185](https://doi.org/10.5281/zenodo.20511185)).
 
 GitHub's "Cite this repository" button (powered by `CITATION.cff`)
 generates BibTeX and APA entries with this DOI.

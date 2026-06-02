@@ -16,12 +16,21 @@ authors:
     orcid: "https://orcid.org/0000-0003-3623-6106"
 repository-code: "https://github.com/kondratevakate/bib-verify"
 url: "https://github.com/kondratevakate/bib-verify"
-doi: "10.5281/zenodo.20511185"
+# Concept DOI: always resolves to the latest release.
+doi: "10.5281/zenodo.20511184"
 license: MIT
 version: 0.2.1
 date-released: "2026-06-02"
-# Tip: if Zenodo shows a separate "concept DOI" (cite-all-versions),
-# prefer it here so the citation always points to the latest release.
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20511184"
+    description: "Concept DOI (all versions)"
+  - type: doi
+    value: "10.5281/zenodo.20511185"
+    description: "Version DOI (v0.2.1)"
+  - type: swh
+    value: "swh:1:dir:2130ed1e57dbf56cc0576cc3ab9ac5c4a72f0feb"
+    description: "Software Heritage archive (v0.2.1)"
 keywords:
   - bibtex
   - citations

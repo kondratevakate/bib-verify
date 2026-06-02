@@ -5,6 +5,7 @@
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8A2BE2)](https://docs.anthropic.com/claude-code)
 [![Tests](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml/badge.svg)](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml)
 [![GitHub release](https://img.shields.io/github/v/release/kondratevakate/bib-verify?include_prereleases&label=release)](https://github.com/kondratevakate/bib-verify/releases)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20511185.svg)](https://doi.org/10.5281/zenodo.20511185)
 [![GitHub stars](https://img.shields.io/github/stars/kondratevakate/bib-verify?style=social)](https://github.com/kondratevakate/bib-verify)
 
 > Catch hallucinated and AI-generated citations in your BibTeX files
@@ -345,6 +346,18 @@ Hallucination archetype taxonomy and statistics in this README draw on:
 
 See [`skills/bib-verify/RESEARCH.md`](skills/bib-verify/RESEARCH.md)
 for the full prior-art audit.
+
+## Citation
+
+If you use bib-verify in your research, please cite it via its archived
+Zenodo record:
+
+> Kondrateva, E. (2026). *bib-verify: Catch hallucinated and
+> AI-generated citations in BibTeX files*. Zenodo.
+> https://doi.org/10.5281/zenodo.20511185
+
+GitHub's "Cite this repository" button (powered by `CITATION.cff`)
+generates BibTeX and APA entries with this DOI.
 
 ## License
 

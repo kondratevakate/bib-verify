@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `CITATION.cff` so GitHub renders the "Cite this repository" button
+  and provides BibTeX / APA / Zotero handoffs.
+- `.zenodo.json` to prepopulate Zenodo DOI metadata on next release.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` for the
+  GitHub Community Standards baseline.
+- `paper/paper.md` and `paper/paper.bib` draft for JOSS submission.
+- `examples/case-studies/dataset-review.md` with real-world audit
+  results (6 hallucinations caught out of 32 entries).
+- `.github/workflows/release.yml` for automatic GitHub Release on
+  every `v*` tag, with notes extracted from `CHANGELOG.md`.
+- Enriched skill description in `SKILL.md` for broader Claude Code
+  auto-triggering on user phrasings.
+
 ### Planned
 
 - Zotero Translation Server backend adapter for one-shot canonical
@@ -16,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bibliographies.
 - Output formats: `json`, `jsonl`, `csv`.
 - Upstream PRs to RefChecker with AI-pattern heuristics.
+- Identifier-hijacking detection via secondary title-search when
+  status is `substituted` (catches the Barch HCP-task case in the
+  dataset-review case study).
 
 ## [0.1.0] - 2026-05-18
 

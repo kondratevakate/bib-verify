@@ -1,0 +1,36 @@
+{
+  "title": "bib-verify: Catch hallucinated and AI-generated citations in BibTeX files",
+  "description": "A Claude Code plugin and standalone Python tool that verifies BibTeX entries against academic databases (Crossref, arXiv, OpenAlex, PubMed) and flags LLM-style citation patterns including placeholder identifiers, fake co-author lists, entry-type confusion, and identifier hijacking (working DOI pointing to a different paper). Implements field-level C/M/F/P/S/X classification per Chen et al. 2026 and the co-occurrence hallucination detector.",
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Kondrateva, Ekaterina",
+      "affiliation": "Maastricht University Medical Centre+, GROW Research Institute for Oncology and Reproduction",
+      "orcid": "0000-0003-3623-6106"
+    }
+  ],
+  "keywords": [
+    "bibtex",
+    "citations",
+    "hallucination-detection",
+    "academic-writing",
+    "reproducibility",
+    "claude-code",
+    "latex",
+    "crossref",
+    "arxiv",
+    "openalex"
+  ],
+  "communities": [
+    {"identifier": "open-science"}
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/kondratevakate/bib-verify",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

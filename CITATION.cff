@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use bib-verify in your research or publications, please cite it as below."
+title: "bib-verify: Catch hallucinated and AI-generated citations in BibTeX files"
+abstract: >-
+  A Claude Code plugin and standalone Python tool that verifies BibTeX
+  entries against academic databases (Crossref, arXiv, OpenAlex,
+  PubMed) and flags LLM-style citation patterns including placeholder
+  identifiers, fake co-author lists, entry-type confusion, and
+  identifier hijacking (working DOI pointing to a different paper).
+type: software
+authors:
+  - given-names: Ekaterina
+    family-names: Kondrateva
+    email: kondratevakate@gmail.com
+    affiliation: "Maastricht University Medical Centre+, GROW Research Institute for Oncology and Reproduction"
+    orcid: "https://orcid.org/0000-0003-3623-6106"
+repository-code: "https://github.com/kondratevakate/bib-verify"
+url: "https://github.com/kondratevakate/bib-verify"
+license: MIT
+version: 0.1.0
+date-released: "2026-06-02"
+keywords:
+  - bibtex
+  - citations
+  - hallucination-detection
+  - academic-writing
+  - reproducibility
+  - claude-code
+  - latex
+  - crossref
+  - arxiv
+  - openalex
+references:
+  - type: article
+    authors:
+      - family-names: Chen
+        given-names: "et al."
+    title: "BibTeX Citation Hallucinations in Scientific Publishing Agents: Evaluation and Mitigation"
+    year: 2026
+    url: "https://arxiv.org/abs/2604.03159"
+    notes: "Source of the C/M/F/P/S/X field-level classification and co-occurrence hallucination detector"
+  - type: software
+    authors:
+      - family-names: Russinovich
+        given-names: Mark
+    title: "RefChecker: Academic Reference Validator"
+    url: "https://github.com/markrussinovich/refchecker"
+    notes: "Source of the 60% author-overlap threshold heuristic"

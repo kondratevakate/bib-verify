@@ -167,6 +167,42 @@ indicating wholesale entry substitution.
    entry-type confusion, `"and others"` laziness, placeholder
    detection. These are not in RefChecker or BibTeX Verifier.
 
+## Real-world results
+
+Applied to a draft dataset review (32 BibTeX entries, anonymized), the
+tool surfaced the following issues on the first pass:
+
+| Status | Count | Examples |
+|---|---:|---|
+| Verified by DOI | 22 | Standard correct entries |
+| **Hallucination** | **6** | DOIs resolved but to entirely different papers (see below) |
+| Substituted | 1 | DOI valid, but the cited paper at that DOI is a different work by overlapping authors |
+| Mismatch | 1 | Closest title-search match below similarity threshold |
+| Placeholder | 2 | `arXiv:2210.xxxxx`-style identifiers |
+
+Selected hallucinations caught (DOI → cited title vs. resolved title):
+
+- `kessler2021adhd` — cited as *"A neuroimaging dataset on response
+  inhibition and selective attention in ADHD"*; DOI `10.1038/s41597-021-00921-y`
+  actually resolves to *"The IDEAL household energy dataset, electricity, gas,
+  contextual sensor data and survey data for 255 UK homes"*. **Cross-domain
+  DOI swap.**
+- `barch2013hcptask` — cited as *"Function in the human connectome:
+  task-fMRI..."* with Barch et al.; DOI resolves to *"The WU-Minn Human
+  Connectome Project: An overview"* by Van Essen et al. **Same project,
+  different paper — classic identifier hijacking.**
+- `casey2018abcd` — cited title and DOI describe two different ABCD
+  publications. **15% author overlap with resolved record.**
+
+After applying the suggested fixes, the same `.bib` produced: **29
+verified by DOI, 1 verified by arXiv, 1 needs review (year discrepancy),
+1 minor mismatch.** Net: 31% → 6% problematic entries, a 5x improvement
+on a single pass.
+
+> If reviewer #2 had pulled any of those six DOIs, the paper would have
+> been desk-rejected as AI-generated. This is exactly the failure mode
+> `bib-verify` is designed to prevent.
+
 ## Install
 
 ### Via Claude Code plugin marketplace *(when published)*

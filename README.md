@@ -3,7 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-8A2BE2)](https://docs.anthropic.com/claude-code)
-[![Tests](https://img.shields.io/badge/tests-32%20passed-brightgreen)](tests/)
+[![Tests](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml/badge.svg)](https://github.com/kondratevakate/bib-verify/actions/workflows/test.yml)
+[![GitHub release](https://img.shields.io/github/v/release/kondratevakate/bib-verify?include_prereleases&label=release)](https://github.com/kondratevakate/bib-verify/releases)
 [![GitHub stars](https://img.shields.io/github/stars/kondratevakate/bib-verify?style=social)](https://github.com/kondratevakate/bib-verify)
 
 > Catch hallucinated and AI-generated citations in your BibTeX files

@@ -1,0 +1,82 @@
+name: Bug report
+description: Report a citation that bib-verify mishandled (false positive, missed hallucination, crash, etc.)
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill in the
+        fields below so we can reproduce the issue. Anonymize any
+        sensitive references before pasting.
+
+  - type: textarea
+    id: bib-snippet
+    attributes:
+      label: BibTeX entry that misbehaved
+      description: The minimal `.bib` snippet that reproduces the issue.
+      render: bibtex
+      placeholder: |
+        @article{example2024,
+          title  = {...},
+          author = {...},
+          ...
+        }
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What bib-verify said
+      description: Paste the relevant part of the verification report or the CLI output.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: For example -- "this entry should resolve as verified" or "this entry should be flagged as hallucination but was marked verified".
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Bug category
+      options:
+        - False positive (flagged a valid citation)
+        - False negative (missed a hallucinated citation)
+        - Parser error (failed to parse .bib)
+        - Crash / exception
+        - Wrong suggested replacement
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: e.g. 3.11
+    validations:
+      required: true
+
+  - type: dropdown
+    id: invocation
+    attributes:
+      label: How was it invoked?
+      options:
+        - Claude Code skill (auto-triggered)
+        - /verify-bib slash command
+        - Direct CLI (python verify_bib.py ...)
+        - PostToolUse hook
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Network conditions, custom env vars, anything unusual.

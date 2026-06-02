@@ -1,0 +1,55 @@
+name: Feature request
+description: Suggest a new heuristic, backend, or improvement
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Particularly useful
+        contributions are: new offline heuristics for AI-generated
+        patterns, additional backend adapters (Zotero TS, RefChecker,
+        DBLP, Semantic Scholar), and multi-format input parsers
+        (.bbl, `\cite{}` extraction from .tex, plain text).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: |
+        Describe the failure mode or use case. If possible, include a
+        real .bib entry that current bib-verify mishandles.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: |
+        Rough sketch of how this could work. Pseudocode is fine.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - New offline heuristic (AI pattern, type confusion, etc.)
+        - New backend adapter (additional database)
+        - New input format (.bbl, .tex, plain text, etc.)
+        - New output format (JSON schema, CSV, etc.)
+        - Performance improvement
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Existing tools that already do this?
+      description: |
+        If RefChecker, BibTeX Verifier, or another tool already handles
+        this, link to it. Helps us decide whether to implement here vs
+        adapt as a backend.
